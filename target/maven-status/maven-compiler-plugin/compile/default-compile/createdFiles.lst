@@ -1,2 +1,4 @@
-com\mycompany\wardrobeapp\Wardrobeapp.class
-db\Database.class
+model\ClothingItem.class
+model\BorrowRequest.class
+db\UserDAO.class
+model\User.class
