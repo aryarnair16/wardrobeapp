@@ -3,6 +3,7 @@
  */
 
 package com.mycompany.wardrobeapp;
+import db.Database;
 
 /**
  *
@@ -11,6 +12,6 @@ package com.mycompany.wardrobeapp;
 public class Wardrobeapp {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        Database.init();
     }
 }
