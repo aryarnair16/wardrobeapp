@@ -2,7 +2,10 @@ package com.mycompany.wardrobeapp;
 
 import db.Database;
 import db.ItemDAO;
+import db.RequestDAO;
 import db.UserDAO;
+import java.util.List;
+import model.BorrowRequest;
 import model.ClothingItem;
 import model.User;
 
@@ -11,21 +14,26 @@ public class Wardrobeapp {
     public static void main(String[] args) {
         Database.init();
         UserDAO.register("Arya", "arya@test.com", "1234");
-        User u = UserDAO.login("arya@test.com", "1234");
-        System.out.println(u != null ? "Login OK: " + u.getUsername() : "Login failed");
+        UserDAO.register("Sara", "sara@test.com", "1234");
+        User arya = UserDAO.login("arya@test.com", "1234");
+        User sara = UserDAO.login("sara@test.com", "1234");
 
-        ClothingItem item = new ClothingItem();
-        item.setOwnerId(u.getUserId());
-        item.setName("Blue Jeans");
-        item.setCategory("Bottom");
-        item.setSize("M");
-        item.setBrand("Levis");
-        item.setCondition("Good");
-        item.setImagePath("");
-        ItemDAO.addItem(item);
+        // Sara asks to borrow Arya's first item (Blue Jeans from the last test)
+        ClothingItem item = ItemDAO.getItemsByUser(arya.getUserId()).get(0);
+        RequestDAO.createRequest(item.getItemId(), sara.getUserId());
 
-        for (ClothingItem i : ItemDAO.getItemsByUser(u.getUserId())) {
-            System.out.println(i.getItemId() + " - " + i.getName() + " (" + i.getCategory() + ")");
+        // Arya's lending queue
+        List<BorrowRequest> pending = RequestDAO.getPendingForOwner(arya.getUserId());
+        for (BorrowRequest r : pending) {
+            System.out.println("Pending: " + r.getItemName() + " requested by " + r.getRequesterName());
         }
+
+        // Arya approves, then Sara returns it and gets rated 4
+        BorrowRequest first = pending.get(0);
+        RequestDAO.approve(first.getRequestId());
+        RequestDAO.returnItem(first.getRequestId(), 4);
+
+        sara = UserDAO.login("sara@test.com", "1234");
+        System.out.println("Sara trust score: " + sara.getTrustScore());
     }
 }
