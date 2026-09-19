@@ -2,3 +2,4 @@ model\ClothingItem.class
 model\BorrowRequest.class
 db\UserDAO.class
 model\User.class
+db\ItemDAO.class
