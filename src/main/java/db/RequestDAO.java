@@ -91,5 +91,17 @@ public class RequestDAO {
             e.printStackTrace();
             return false;
         }
+    }public static boolean createRequest(int itemId, int borrowerId, int ownerId) {
+        return createRequest(itemId, borrowerId);
+    }
+
+    public static boolean updateStatus(int requestId, String newStatus) {
+        return update("UPDATE borrow_requests SET status = ? WHERE request_id = ?",
+                fixCase(newStatus), requestId);
+    }
+
+    private static String fixCase(String s) {
+        if (s == null || s.isEmpty()) return s;
+        return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
     }
 }

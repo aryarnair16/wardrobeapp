@@ -96,5 +96,8 @@ public class ItemDAO {
             e.printStackTrace();
         }
         return list;
+    }public static boolean updateItemStatus(int itemId, String status) {
+        String fixed = status.substring(0, 1).toUpperCase() + status.substring(1).toLowerCase();
+        return updateAvailability(itemId, fixed);
     }
 }

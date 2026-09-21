@@ -43,5 +43,26 @@ public class UserDAO {
             e.printStackTrace();
         }
         return null;
+    }public static boolean addRatingAndUpdateTrustScore(int borrowerId, int rating) {
+        try (Connection c = Database.getConnection()) {
+            try (PreparedStatement ps = c.prepareStatement(
+                    "INSERT INTO ratings (rated_user_id, score) VALUES (?, ?)")) {
+                ps.setInt(1, borrowerId);
+                ps.setInt(2, rating);
+                ps.executeUpdate();
+            }
+            try (PreparedStatement ps = c.prepareStatement(
+                    "UPDATE users SET trust_score = "
+                    + "(SELECT AVG(score) FROM ratings WHERE rated_user_id = ?) "
+                    + "WHERE user_id = ?")) {
+                ps.setInt(1, borrowerId);
+                ps.setInt(2, borrowerId);
+                ps.executeUpdate();
+            }
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
