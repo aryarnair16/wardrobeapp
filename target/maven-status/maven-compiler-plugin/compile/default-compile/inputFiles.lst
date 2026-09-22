@@ -7,4 +7,10 @@ C:\Users\aryar\OneDrive\Desktop\java proj\wardrobeapp\src\main\java\db\UserDAO.j
 C:\Users\aryar\OneDrive\Desktop\java proj\wardrobeapp\src\main\java\model\BorrowRequest.java
 C:\Users\aryar\OneDrive\Desktop\java proj\wardrobeapp\src\main\java\model\ClothingItem.java
 C:\Users\aryar\OneDrive\Desktop\java proj\wardrobeapp\src\main\java\model\User.java
-C:\Users\aryar\OneDrive\Desktop\java proj\wardrobeapp\src\main\java\ui\OutfitFrame.java
+C:\Users\aryar\OneDrive\Desktop\java proj\wardrobeapp\src\main\java\ui\BrowseItemsWindow.java
+C:\Users\aryar\OneDrive\Desktop\java proj\wardrobeapp\src\main\java\ui\Dashboard.java
+C:\Users\aryar\OneDrive\Desktop\java proj\wardrobeapp\src\main\java\ui\LendingQueueWindow.java
+C:\Users\aryar\OneDrive\Desktop\java proj\wardrobeapp\src\main\java\ui\LoginScreen.java
+C:\Users\aryar\OneDrive\Desktop\java proj\wardrobeapp\src\main\java\ui\OutfitWindow.java
+C:\Users\aryar\OneDrive\Desktop\java proj\wardrobeapp\src\main\java\ui\ReturnItemWindow.java
+C:\Users\aryar\OneDrive\Desktop\java proj\wardrobeapp\src\main\java\ui\WardrobeScreen.java

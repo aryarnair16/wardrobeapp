@@ -1,8 +1,14 @@
 db\RequestDAO.class
+db\UserDAO.class
+ui\WardrobeScreen.class
+ui\OutfitWindow.class
+ui\LoginScreen.class
 db\OutfitDAO.class
 model\ClothingItem.class
-ui\OutfitFrame.class
 model\BorrowRequest.class
-db\UserDAO.class
+ui\ReturnItemWindow.class
+ui\BrowseItemsWindow.class
 model\User.class
+ui\LendingQueueWindow.class
 db\ItemDAO.class
+ui\Dashboard.class
