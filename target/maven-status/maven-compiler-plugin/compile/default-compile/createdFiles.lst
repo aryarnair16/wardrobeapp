@@ -1,5 +1,7 @@
+com\mycompany\wardrobeapp\Wardrobeapp.class
 db\RequestDAO.class
 db\UserDAO.class
+db\Database.class
 ui\WardrobeScreen.class
 ui\OutfitWindow.class
 ui\LoginScreen.class

@@ -16,6 +16,9 @@ public class Wardrobeapp {
         UserDAO.register("Arya", "arya@test.com", "1234");
         UserDAO.register("Sara", "sara@test.com", "1234");
         User arya = UserDAO.login("arya@test.com", "1234");
+        User sreehari = UserDAO.login("sreehari@test.com", "1234");
+        User sidharth = UserDAO.login("sidharth@test.com", "1234");
+        User bharath = UserDAO.login("bharath@test.com", "1234");
         User sara = UserDAO.login("sara@test.com", "1234");
 
         // Sara asks to borrow Arya's first item (Blue Jeans from the last test)

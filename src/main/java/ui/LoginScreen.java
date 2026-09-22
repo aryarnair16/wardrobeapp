@@ -34,4 +34,9 @@ public class LoginScreen extends JFrame {
             }
         });
     }
+    public static void main(String[] args) {
+        java.awt.EventQueue.invokeLater(() -> {
+            new LoginScreen().setVisible(true);
+        });
+    }
 }
