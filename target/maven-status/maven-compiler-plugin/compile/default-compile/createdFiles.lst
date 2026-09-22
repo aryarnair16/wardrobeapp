@@ -1,6 +1,7 @@
 db\RequestDAO.class
 db\OutfitDAO.class
 model\ClothingItem.class
+ui\OutfitFrame.class
 model\BorrowRequest.class
 db\UserDAO.class
 model\User.class
