@@ -1,4 +1,5 @@
 db\RequestDAO.class
+db\OutfitDAO.class
 model\ClothingItem.class
 model\BorrowRequest.class
 db\UserDAO.class
