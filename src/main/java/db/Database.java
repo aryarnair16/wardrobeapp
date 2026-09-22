@@ -8,63 +8,65 @@ import java.sql.Statement;
 public class Database {
 
     private static final String URL = "jdbc:sqlite:wardrobe.db";
+    private static boolean initialized = false;
 
-    // Everyone calls this to talk to the database
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL);
+        Connection conn = DriverManager.getConnection(URL);
+        if (!initialized) {
+            initTables(conn);
+            initialized = true;
+        }
+        return conn;
     }
 
-    // Creates all tables (only if they don't exist yet)
     public static void init() {
-        String[] tables = {
-            "CREATE TABLE IF NOT EXISTS users ("
-            + "user_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + "username TEXT NOT NULL, "
-            + "email TEXT NOT NULL UNIQUE, "
-            + "password TEXT NOT NULL, "
-            + "trust_score REAL DEFAULT 5.0)",
-
-            "CREATE TABLE IF NOT EXISTS clothing_items ("
-            + "item_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + "owner_id INTEGER NOT NULL, "
-            + "name TEXT NOT NULL, "
-            + "category TEXT, "
-            + "size TEXT, "
-            + "brand TEXT, "
-            + "item_condition TEXT, "
-            + "availability TEXT DEFAULT 'Available', "
-            + "image_path TEXT)",
-
-            "CREATE TABLE IF NOT EXISTS borrow_requests ("
-            + "request_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + "item_id INTEGER NOT NULL, "
-            + "requester_id INTEGER NOT NULL, "
-            + "request_date TEXT, "
-            + "status TEXT DEFAULT 'Pending')",
-
-            "CREATE TABLE IF NOT EXISTS outfits ("
-            + "outfit_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + "user_id INTEGER NOT NULL, "
-            + "name TEXT, "
-            + "top_id INTEGER, "
-            + "bottom_id INTEGER, "
-            + "outerwear_id INTEGER)",
-
-            "CREATE TABLE IF NOT EXISTS ratings ("
-            + "rating_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + "request_id INTEGER, "
-            + "rater_id INTEGER, "
-            + "rated_user_id INTEGER, "
-            + "score INTEGER)"
-        };
-
-        try (Connection c = getConnection(); Statement s = c.createStatement()) {
-            for (String sql : tables) {
-                s.execute(sql);
-            }
-            System.out.println("Database ready");
+        try (Connection conn = getConnection()) {
+            // Triggers connection & table creation
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void initTables(Connection conn) {
+        String createUsersTable = "CREATE TABLE IF NOT EXISTS users ("
+                + "user_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "username TEXT UNIQUE, "
+                + "password TEXT"
+                + ");";
+
+        String createItemsTable = "CREATE TABLE IF NOT EXISTS items ("
+                + "item_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "user_id INTEGER, "
+                + "name TEXT, "
+                + "category TEXT, "
+                + "size TEXT, "
+                + "image_path TEXT, "
+                + "FOREIGN KEY(user_id) REFERENCES users(user_id)"
+                + ");";
+
+        String createOutfitsTable = "CREATE TABLE IF NOT EXISTS outfits ("
+                + "outfit_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "user_id INTEGER, "
+                + "name TEXT, "
+                + "top_id INTEGER, "
+                + "bottom_id INTEGER, "
+                + "outerwear_id INTEGER"
+                + ");";
+
+        String createRequestsTable = "CREATE TABLE IF NOT EXISTS requests ("
+                + "request_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "item_id INTEGER, "
+                + "requester_id INTEGER, "
+                + "status TEXT"
+                + ");";
+
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(createUsersTable);
+            stmt.execute(createItemsTable);
+            stmt.execute(createOutfitsTable);
+            stmt.execute(createRequestsTable);
+        } catch (SQLException e) {
+            System.err.println("Database initialization error: " + e.getMessage());
         }
     }
 }

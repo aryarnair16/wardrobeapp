@@ -8,35 +8,45 @@ import java.util.List;
 import model.BorrowRequest;
 import model.ClothingItem;
 import model.User;
+import ui.LoginScreen;
 
 public class Wardrobeapp {
 
     public static void main(String[] args) {
+        // 1. Initialize Database Tables
         Database.init();
+
+        // 2. Register All Team Members into Database
         UserDAO.register("Arya", "arya@test.com", "1234");
         UserDAO.register("Sara", "sara@test.com", "1234");
+        UserDAO.register("Sreehari", "sreehari@test.com", "1234");
+        UserDAO.register("Sidharth", "sidharth@test.com", "1234");
+        UserDAO.register("Bharath", "bharath@test.com", "1234");
+
+        // 3. Optional DB Test Workflow (safely checks if items exist first)
         User arya = UserDAO.login("arya@test.com", "1234");
-        User sreehari = UserDAO.login("sreehari@test.com", "1234");
-        User sidharth = UserDAO.login("sidharth@test.com", "1234");
-        User bharath = UserDAO.login("bharath@test.com", "1234");
         User sara = UserDAO.login("sara@test.com", "1234");
 
-        // Sara asks to borrow Arya's first item (Blue Jeans from the last test)
-        ClothingItem item = ItemDAO.getItemsByUser(arya.getUserId()).get(0);
-        RequestDAO.createRequest(item.getItemId(), sara.getUserId());
+        if (arya != null && sara != null) {
+            List<ClothingItem> aryaItems = ItemDAO.getItemsByUser(arya.getUserId());
+            
+            // Only attempt borrowing test if Arya already has items in her wardrobe
+            if (aryaItems != null && !aryaItems.isEmpty()) {
+                ClothingItem item = aryaItems.get(0);
+                RequestDAO.createRequest(item.getItemId(), sara.getUserId());
 
-        // Arya's lending queue
-        List<BorrowRequest> pending = RequestDAO.getPendingForOwner(arya.getUserId());
-        for (BorrowRequest r : pending) {
-            System.out.println("Pending: " + r.getItemName() + " requested by " + r.getRequesterName());
+                List<BorrowRequest> pending = RequestDAO.getPendingForOwner(arya.getUserId());
+                if (pending != null && !pending.isEmpty()) {
+                    BorrowRequest first = pending.get(0);
+                    RequestDAO.approve(first.getRequestId());
+                    RequestDAO.returnItem(first.getRequestId(), 4);
+                }
+            }
         }
 
-        // Arya approves, then Sara returns it and gets rated 4
-        BorrowRequest first = pending.get(0);
-        RequestDAO.approve(first.getRequestId());
-        RequestDAO.returnItem(first.getRequestId(), 4);
-
-        sara = UserDAO.login("sara@test.com", "1234");
-        System.out.println("Sara trust score: " + sara.getTrustScore());
+        // 4. Launch the Desktop Application UI
+        java.awt.EventQueue.invokeLater(() -> {
+            new LoginScreen().setVisible(true);
+        });
     }
 }
