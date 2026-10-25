@@ -7,6 +7,9 @@ public class User {
     private String email;
     private String password;
     private double trustScore;
+    private int totalRatings;
+    private String neighborhood;
+    private String avatar;
 
     public User() {
     }
@@ -17,6 +20,20 @@ public class User {
         this.email = email;
         this.password = password;
         this.trustScore = trustScore;
+        this.totalRatings = 0;
+        this.neighborhood = "Central Campus";
+        this.avatar = "/public/images/avatars/default.png";
+    }
+
+    public User(int userId, String username, String email, String password, double trustScore, int totalRatings, String neighborhood, String avatar) {
+        this.userId = userId;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.trustScore = trustScore;
+        this.totalRatings = totalRatings;
+        this.neighborhood = neighborhood;
+        this.avatar = avatar;
     }
 
     public int getUserId() {
@@ -57,6 +74,30 @@ public class User {
 
     public void setTrustScore(double trustScore) {
         this.trustScore = trustScore;
+    }
+
+    public int getTotalRatings() {
+        return totalRatings;
+    }
+
+    public void setTotalRatings(int totalRatings) {
+        this.totalRatings = totalRatings;
+    }
+
+    public String getNeighborhood() {
+        return neighborhood;
+    }
+
+    public void setNeighborhood(String neighborhood) {
+        this.neighborhood = neighborhood;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
 

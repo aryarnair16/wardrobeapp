@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WearNet - Digital Wardrobe Randomizer & Peer Lending Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <!-- TOP NAVBAR -->
+  <header class="navbar">
+    <div class="brand-wrap" onclick="switchTab('dashboard')">
+      <div class="brand-icon">👗</div>
+      <div class="brand-text">
+        <h1>WearNet</h1>
+        <span>Digital Wardrobe & Peer Sharing Network</span>
+      </div>
+    </div>
+
+    <nav>
+      <ul class="nav-links">
+        <li class="nav-link active" onclick="switchTab('dashboard')">📊 Dashboard</li>
+        <li class="nav-link" onclick="switchTab('wardrobe')">🧥 My Wardrobe</li>
+        <li class="nav-link" onclick="switchTab('generator')">🎲 AI Randomizer</li>
+        <li class="nav-link" onclick="switchTab('lending')">🤝 Peer Lending</li>
+        <li class="nav-link" onclick="switchTab('verification')">🔍 AI Verification</li>
+        <li class="nav-link" onclick="switchTab('complaints')">⚖️ Complaints & Compensation</li>
+        <li class="nav-link" onclick="switchTab('thrift')">🏷️ Thrift Store</li>
+        <li class="nav-link" onclick="switchTab('ratings')">⭐ Trust & Ratings</li>
+      </ul>
+    </nav>
+
+    <div class="nav-right">
+      <div class="pilot-tag" title="Project Pilot Scope: In-person peer group">
+        <span>📍</span> 4-Person Pilot
+      </div>
+
+      <!-- Quick Switcher Dropdown for Demo -->
+      <div class="user-pill" onclick="openUserSwitcherModal()" title="Click to switch active pilot user">
+        <img id="navAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Avatar" class="user-avatar">
+        <div class="user-info">
+          <span id="navUsername" class="user-name">Arya</span>
+          <span id="navScore" class="user-score">★ 4.9 (14 Reviews)</span>
+        </div>
+        <span style="font-size:0.75rem; color:#7E565F; margin-left:4px;">▼</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="app-container">
+
+    <!-- TAB 1: DASHBOARD -->
+    <section id="tab-dashboard" class="tab-pane active">
+      <div class="card" style="margin-bottom: 1.5rem; background: linear-gradient(135deg, #4B1D27 0%, #6D2E3A 55%, #9A4454 100%); color: #fff; border: none; box-shadow: 0 12px 28px -4px rgba(75, 29, 39, 0.28);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.35rem;">Welcome back, <span id="dashWelcomeName">Arya</span>! ✨</h2>
+            <p style="color: #F3C6B6; font-size: 0.9rem;">Your digital wardrobe is synced. 4 peers in your nearby network are ready for in-person item exchanges.</p>
+          </div>
+          <div style="display: flex; gap: 0.75rem;">
+            <button class="btn btn-primary" onclick="switchTab('generator')" style="background: #C86A5A; box-shadow: 0 4px 12px rgba(200, 106, 90, 0.35);">🎲 Generate Outfit</button>
+            <button class="btn btn-secondary" onclick="openAddItemModal()" style="background: rgba(253, 237, 231, 0.18); color: #fff; border: 1px solid rgba(253, 237, 231, 0.35);">➕ Add Wardrobe Item</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATS GRID -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon indigo">🧥</div>
+          <div>
+            <div class="stat-label">Wardrobe Items</div>
+            <div id="statTotalItems" class="stat-value">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon emerald">🤝</div>
+          <div>
+            <div class="stat-label">Active Lent Items</div>
+            <div id="statLentOut" class="stat-value">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon amber">⭐</div>
+          <div>
+            <div class="stat-label">Peer Trust Score</div>
+            <div id="statTrustScore" class="stat-value">5.0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon rose">⚖️</div>
+          <div>
+            <div class="stat-label">Open Disputes</div>
+            <div id="statComplaints" class="stat-value">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVE LENDING TIMELINE / OVERVIEW -->
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="card-header">
+          <h3 class="card-title">🚀 Active Lending & Return Queue</h3>
+          <button class="btn btn-outline btn-sm" onclick="switchTab('lending')">View Full Lending Hub →</button>
+        </div>
+        <div id="dashLendingQueue">
+          <p style="color: var(--text-muted); font-size: 0.88rem;">Loading active peer exchanges...</p>
+        </div>
+      </div>
+
+      <!-- PILOT PEER CIRCLE HIGHLIGHT -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">👥 Nearby Peer Network (4-Person Pilot Circle)</h3>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">In-person handovers • Zero monetary lending fee</span>
+        </div>
+        <div id="dashPeerGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+          <!-- Loaded dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: MY DIGITAL WARDROBE -->
+    <section id="tab-wardrobe" class="tab-pane">
+      <div class="filters-bar">
+        <div class="filter-pills" id="categoryFilters">
+          <button class="filter-btn active" onclick="filterWardrobe('ALL')">All Pieces</button>
+          <button class="filter-btn" onclick="filterWardrobe('Tops')">Tops</button>
+          <button class="filter-btn" onclick="filterWardrobe('Bottoms')">Bottoms</button>
+          <button class="filter-btn" onclick="filterWardrobe('Outerwear')">Outerwear</button>
+          <button class="filter-btn" onclick="filterWardrobe('Footwear')">Footwear</button>
+          <button class="filter-btn" onclick="filterWardrobe('Accessories')">Accessories</button>
+          <button class="filter-btn" onclick="filterWardrobe('THRIFT')">🏷️ Listed for Thrift</button>
+        </div>
+        <button class="btn btn-primary" onclick="openAddItemModal()">➕ Upload New Item</button>
+      </div>
+
+      <div id="wardrobeGrid" class="items-grid">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
+
+    <!-- TAB 3: AI OUTFIT RANDOMIZER & MATCHING -->
+    <section id="tab-generator" class="tab-pane">
+      <div class="generator-controls">
+        <div class="controls-group">
+          <label style="font-size: 0.82rem; font-weight: 700; color: #6D2E3A;">Occasion:</label>
+          <select id="genOccasion" class="select-ctrl" onchange="runGenerator()">
+            <option value="Casual">Casual Daily</option>
+            <option value="Formal">Formal / Professional</option>
+            <option value="Party">Party / Night Out</option>
+            <option value="Streetwear">Streetwear</option>
+            <option value="Summer">Summer Minimal</option>
+            <option value="Winter">Winter Cozy</option>
+          </select>
+
+          <label style="font-size: 0.82rem; font-weight: 700; color: #6D2E3A; margin-left: 0.5rem;">Season:</label>
+          <select id="genSeason" class="select-ctrl" onchange="runGenerator()">
+            <option value="All-Season">All-Season</option>
+            <option value="Summer">Summer</option>
+            <option value="Winter">Winter</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem;">
+          <button class="btn btn-secondary" onclick="unlockAllSlots()">🔓 Unlock All</button>
+          <button class="btn btn-primary" onclick="runGenerator()" id="shuffleBtn">
+            <span id="shuffleIcon">🎲</span> Shuffle & Randomize
+          </button>
+          <button class="btn btn-success" onclick="saveCurrentOutfit()">💾 Save Look</button>
+        </div>
+      </div>
+
+      <div class="outfit-builder-layout">
+        <div>
+          <!-- MANNEQUIN / SLOTS CANVAS -->
+          <div class="canvas-container">
+            <!-- TOP SLOT -->
+            <div class="slot-card" id="slot-top">
+              <div class="slot-header">
+                <span class="slot-title">Top</span>
+                <button class="lock-btn" id="lock-top" onclick="toggleLock('Top')" title="Lock/Unlock this item">🔓</button>
+              </div>
+              <div class="slot-img-wrap" id="slot-top-img-wrap">
+                <span class="slot-empty">No top selected</span>
+              </div>
+              <div class="slot-meta" id="slot-top-meta"></div>
+            </div>
+
+            <!-- BOTTOM SLOT -->
+            <div class="slot-card" id="slot-bottom">
+              <div class="slot-header">
+                <span class="slot-title">Bottom</span>
+                <button class="lock-btn" id="lock-bottom" onclick="toggleLock('Bottom')" title="Lock/Unlock this item">🔓</button>
+              </div>
+              <div class="slot-img-wrap" id="slot-bottom-img-wrap">
+                <span class="slot-empty">No bottom selected</span>
+              </div>
+              <div class="slot-meta" id="slot-bottom-meta"></div>
+            </div>
+
+            <!-- OUTERWEAR SLOT -->
+            <div class="slot-card" id="slot-outerwear">
+              <div class="slot-header">
+                <span class="slot-title">Outerwear</span>
+                <button class="lock-btn" id="lock-outerwear" onclick="toggleLock('Outerwear')" title="Lock/Unlock this item">🔓</button>
+              </div>
+              <div class="slot-img-wrap" id="slot-outerwear-img-wrap">
+                <span class="slot-empty">Optional layer</span>
+              </div>
+              <div class="slot-meta" id="slot-outerwear-meta"></div>
+            </div>
+
+            <!-- FOOTWEAR SLOT -->
+            <div class="slot-card" id="slot-footwear">
+              <div class="slot-header">
+                <span class="slot-title">Footwear</span>
+                <button class="lock-btn" id="lock-footwear" onclick="toggleLock('Footwear')" title="Lock/Unlock this item">🔓</button>
+              </div>
+              <div class="slot-img-wrap" id="slot-footwear-img-wrap">
+                <span class="slot-empty">No footwear selected</span>
+              </div>
+              <div class="slot-meta" id="slot-footwear-meta"></div>
+            </div>
+
+            <!-- ACCESSORY SLOT -->
+            <div class="slot-card" id="slot-accessory">
+              <div class="slot-header">
+                <span class="slot-title">Accessory</span>
+                <button class="lock-btn" id="lock-accessory" onclick="toggleLock('Accessory')" title="Lock/Unlock this item">🔓</button>
+              </div>
+              <div class="slot-img-wrap" id="slot-accessory-img-wrap">
+                <span class="slot-empty">No accessory selected</span>
+              </div>
+              <div class="slot-meta" id="slot-accessory-meta"></div>
+            </div>
+          </div>
+
+          <!-- PEER CROSS-USER BORROWING RECOMMENDATION -->
+          <div id="peerSuggestionWrap" class="peer-suggestion-box" style="display: none;">
+            <img id="peerSuggestImg" src="" alt="Suggested Item" class="peer-suggest-img">
+            <div class="peer-suggest-content">
+              <div class="peer-suggest-title">
+                <span>🌟</span> Network Stylist Recommendation
+              </div>
+              <p id="peerSuggestDesc" class="peer-suggest-desc"></p>
+            </div>
+            <button id="peerSuggestBtn" class="btn btn-primary btn-sm" onclick="borrowSuggestedItem()">🤝 Request to Borrow</button>
+          </div>
+
+          <!-- SAVED OUTFITS DRAWER -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">📖 Your Saved Curations</h3>
+            </div>
+            <div id="savedOutfitsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem;">
+              <p style="color: var(--text-muted); font-size: 0.85rem;">No saved looks yet. Hit "Save Look" to store your favorite combinations!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIDEBAR: AI-POWERED AFFILIATE PRODUCT RECOMMENDATIONS -->
+        <aside class="affiliate-section">
+          <div style="margin-bottom: 1rem;">
+            <h4 style="font-size: 0.95rem; font-weight: 800; color: #4B1D27;">🛍️ Complete the Look</h4>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">AI affiliate suggestions from Amazon & Myntra</span>
+          </div>
+          <div id="affiliateList">
+            <!-- Loaded dynamically -->
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- TAB 4: PEER WARDROBE NETWORK & LENDING HUB -->
+    <section id="tab-lending" class="tab-pane">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: #4B1D27;">Peer-to-Peer Wardrobe Network</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Borrow items from friends in your 4-person pilot group. In-person exchanges, zero monetary fees.</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-outline" onclick="loadPeerWardrobes()">🔄 Refresh Closets</button>
+        </div>
+      </div>
+
+      <!-- INCOMING & OUTGOING REQUESTS TABS -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-header">
+          <h3 class="card-title">📋 Active Borrow Requests & Lending Queue</h3>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;" id="lendingQueueGrid">
+          <div>
+            <h4 style="font-size: 0.9rem; font-weight: 800; color: #6D2E3A; margin-bottom: 0.75rem;">📥 Incoming Requests (For Your Items)</h4>
+            <div id="incomingRequestsList">
+              <p style="color: var(--text-muted); font-size: 0.85rem;">No incoming requests.</p>
+            </div>
+          </div>
+          <div>
+            <h4 style="font-size: 0.9rem; font-weight: 800; color: #C86A5A; margin-bottom: 0.75rem;">📤 Outgoing Requests (You Borrowed)</h4>
+            <div id="outgoingRequestsList">
+              <p style="color: var(--text-muted); font-size: 0.85rem;">No outgoing requests.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BROWSE PEER WARDROBES -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">🧥 Explore Peer Wardrobes</h3>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Borrow accessories, jackets, sunglasses, and clothes</span>
+        </div>
+        <div id="peerItemsGrid" class="items-grid">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: AI IMAGE VERIFICATION LAB -->
+    <section id="tab-verification" class="tab-pane">
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="card-header">
+          <div>
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: #4B1D27;">🤖 AI Image Verification Engine</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Automated condition check comparing pre-lend baseline photo against return photo to detect stains, tears, and discoloration.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary btn-sm" onclick="loadVerificationDemoPreset('pristine')">Demo: Pristine Return (98% Match)</button>
+            <button class="btn btn-secondary btn-sm" onclick="loadVerificationDemoPreset('damaged')">Demo: Stained Return (64% Match)</button>
+          </div>
+        </div>
+
+        <!-- SPLIT COMPARISON INSPECTOR -->
+        <div class="verification-container">
+          <div class="photo-inspect-box">
+            <div class="inspect-header">
+              <span class="inspect-title">📸 Pre-Lend Baseline Photo (Owner Inspection)</span>
+              <span class="tag-pill" style="background:#FDEDE7; color:#6D2E3A;">Pre-Lend Baseline</span>
+            </div>
+            <div class="inspect-img-wrap">
+              <img id="inspectPreLendImg" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500" alt="Pre-lend" class="inspect-img">
+            </div>
+            <div style="margin-top:0.75rem; font-size:0.8rem; color:var(--text-muted);">
+              Taken prior to physical handover to record item condition.
+            </div>
+          </div>
+
+          <div class="photo-inspect-box">
+            <div class="inspect-header">
+              <span class="inspect-title">📸 Return Inspection Photo (Borrower Submission)</span>
+              <span class="tag-pill" style="background:#F3C6B6; color:#4B1D27;">Return Check</span>
+            </div>
+            <div class="inspect-img-wrap">
+              <img id="inspectPostLendImg" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500" alt="Post-lend" class="inspect-img">
+            </div>
+            <div style="margin-top:0.75rem; font-size:0.8rem; color:var(--text-muted);">
+              Submitted by borrower before completing handover.
+            </div>
+          </div>
+        </div>
+
+        <!-- AI VERIFICATION REPORT CARD -->
+        <div id="aiScoreBanner" class="score-banner passed">
+          <div>
+            <div style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">AI Condition Verification Verdict</div>
+            <h3 id="aiVerdictTitle" style="font-size: 1.25rem; font-weight: 800;">VERIFIED INTACT (97.4% Match)</h3>
+            <p id="aiVerdictDesc" style="font-size: 0.88rem; margin-top: 0.35rem; max-width: 700px; line-height: 1.4;">
+              Zero stains, zero fabric abrasions, zipper hardware 100% functional. Eligible for full trust score rating.
+            </p>
+          </div>
+          <div style="text-align: right;">
+            <div id="aiScoreNumber" class="score-gauge">97.4%</div>
+            <div style="font-size: 0.75rem; font-weight: 600;">Match Fidelity</div>
+          </div>
+        </div>
+
+        <!-- ACTION BUTTONS BASED ON AI VERIFICATION -->
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem;" id="aiActionButtons">
+          <button class="btn btn-primary" onclick="proceedToRatingFromVerification()">⭐ Submit 5-Star Rating</button>
+          <button class="btn btn-danger" onclick="openDisputeModalFromVerification()">⚖️ File Damage Complaint</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: COMPLAINT & COMPENSATION MODULE -->
+    <section id="tab-complaints" class="tab-pane">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: #4B1D27;">Dispute, Complaint & Compensation Center</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Fair resolution and automated compensation assessment backed by AI Image Verification evidence.</p>
+        </div>
+        <button class="btn btn-danger" onclick="openCreateComplaintModal()">⚖️ File New Dispute</button>
+      </div>
+
+      <!-- ACTIVE DISPUTES LIST -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">📜 Active & Resolved Disputes</h3>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Peer mutual compensation / arbitration</span>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="complaints-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Item & Issue</th>
+                <th>Complainant</th>
+                <th>Respondent</th>
+                <th>AI Damage Index</th>
+                <th>Claimed</th>
+                <th>Settled</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="complaintsTableBody">
+              <!-- Populated by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 7: THRIFT STORE ADD-ON -->
+    <section id="tab-thrift" class="tab-pane">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: #4B1D27;">Secondary Peer Thrift Store</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Buy and sell pre-loved clothing and accessories within your trusted campus community.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openAddItemModal(true)">🏷️ List Item for Sale</button>
+      </div>
+
+      <div id="thriftGrid" class="items-grid">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
+
+    <!-- TAB 8: TRUST & RATINGS SYSTEM -->
+    <section id="tab-ratings" class="tab-pane">
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
+          <div style="text-align: center; padding: 1rem 2rem; border-right: 1px solid var(--border);">
+            <div id="trustBigScore" style="font-size: 3rem; font-weight: 900; color: #C86A5A; line-height: 1;">4.9</div>
+            <div style="color: #C86A5A; font-size: 1.2rem; margin: 0.25rem 0;">★★★★★</div>
+            <div id="trustTotalReviews" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Based on 14 peer exchanges</div>
+          </div>
+          <div style="flex: 1;">
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: #4B1D27; margin-bottom: 0.35rem;">Uber / Airbnb-Style Accountability Layer</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0.75rem;">
+              Every lending transaction requires pre and post-lend AI image verification. When items are returned in pristine condition, trust scores increase. If damage or late return is verified, ratings drop automatically, maintaining peer trust without logistics overhead.
+            </p>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <span class="tag-pill" style="background:#FDEDE7; color:#6D2E3A; border-color:#F3C6B6; font-weight:700;">✓ Verified Clean Returns</span>
+              <span class="tag-pill" style="background:#FDEDE7; color:#C86A5A; border-color:#F3C6B6; font-weight:700;">✓ In-Person Handover</span>
+              <span class="tag-pill" style="background:#FDEDE7; color:#9A4454; border-color:#F3C6B6; font-weight:700;">✓ AI Condition Audited</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">💬 Peer Feedback & Reviews</h3>
+        </div>
+        <div id="ratingsList" style="display: flex; flex-direction: column; gap: 1rem;">
+          <!-- Loaded dynamically -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: ADD WARDROBE ITEM -->
+  <div id="modalAddItem" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">➕ Add New Wardrobe Item</h3>
+        <button class="modal-close" onclick="closeModal('modalAddItem')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Item Title / Name *</label>
+          <input type="text" id="newItemName" class="form-input" placeholder="e.g. Vintage Oversized Denim Jacket">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select id="newItemCategory" class="form-select">
+              <option value="Tops">Tops</option>
+              <option value="Bottoms">Bottoms</option>
+              <option value="Outerwear">Outerwear</option>
+              <option value="Footwear">Footwear</option>
+              <option value="Accessories">Accessories</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Subcategory / Type</label>
+            <input type="text" id="newItemSubcategory" class="form-input" placeholder="e.g. Jacket, Sunglasses, Watch">
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group">
+            <label class="form-label">Size</label>
+            <input type="text" id="newItemSize" class="form-input" placeholder="e.g. M, 32, OS">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Color</label>
+            <input type="text" id="newItemColor" class="form-input" placeholder="e.g. Navy Blue">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Occasion Style</label>
+            <select id="newItemStyle" class="form-select">
+              <option value="Casual">Casual</option>
+              <option value="Formal">Formal</option>
+              <option value="Party">Party</option>
+              <option value="Streetwear">Streetwear</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Photo Image URL *</label>
+          <input type="text" id="newItemImageUrl" class="form-input" placeholder="Paste image link or use sample URL">
+          <div style="display:flex; gap:0.4rem; margin-top:0.4rem; flex-wrap:wrap;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="setSampleImg('jacket')">Sample Jacket</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="setSampleImg('sunglasses')">Sample Sunglasses</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="setSampleImg('sneakers')">Sample Sneakers</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="setSampleImg('trousers')">Sample Trousers</button>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Original Retail Value (₹)</label>
+            <input type="number" id="newItemOriginalVal" class="form-input" value="2500">
+          </div>
+          <div class="form-group">
+            <label class="form-label">List in Thrift Store?</label>
+            <select id="newItemIsThrift" class="form-select" onchange="toggleThriftPriceInput()">
+              <option value="false">No (Personal Wardrobe Only)</option>
+              <option value="true">Yes (For Sale)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" id="thriftPriceGroup" style="display: none;">
+          <label class="form-label">Thrift Asking Price (₹) *</label>
+          <input type="number" id="newItemThriftPrice" class="form-input" placeholder="e.g. 799">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modalAddItem')">Cancel</button>
+        <button class="btn btn-primary" onclick="submitNewItem()">Save Piece</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: BORROW REQUEST -->
+  <div id="modalBorrowRequest" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">🤝 Request to Borrow Item</h3>
+        <button class="modal-close" onclick="closeModal('modalBorrowRequest')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="borrowItemSummary" style="display: flex; gap: 1rem; align-items: center; background: #FFF9F7; padding: 0.85rem; border-radius: 10px; margin-bottom: 1.25rem;">
+          <img id="borrowModalImg" src="" style="width: 60px; height: 60px; border-radius: 8px; object-fit: cover;">
+          <div>
+            <h4 id="borrowModalName" style="font-size: 0.95rem; font-weight: 700;">Item Name</h4>
+            <span id="borrowModalOwner" style="font-size: 0.8rem; color: var(--text-muted);">Owner: Sara</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Requested Handover Return Date</label>
+          <input type="text" id="borrowReturnDate" class="form-input" placeholder="e.g. Monday Afternoon (3 days)">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Note for the Owner</label>
+          <textarea id="borrowNotes" class="form-textarea" rows="3" placeholder="e.g. Need this for college festival tomorrow! Will return clean and intact."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modalBorrowRequest')">Cancel</button>
+        <button class="btn btn-primary" onclick="submitBorrowRequest()">Send Request</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PRE-LEND HANDOVER INSPECTION (OWNER UPLOADS BASELINE PHOTO) -->
+  <div id="modalHandover" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">📸 Handover & Pre-Lend Photo Verification</h3>
+        <button class="modal-close" onclick="closeModal('modalHandover')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Record a baseline condition photo of your item before in-person handover. This baseline will be compared with the return photo by the AI Image Verification engine.
+        </p>
+        <div class="form-group">
+          <label class="form-label">Pre-Lend Baseline Photo URL</label>
+          <input type="text" id="handoverPhotoUrl" class="form-input" placeholder="Paste condition photo link">
+          <div style="margin-top: 0.5rem;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="useExistingItemPhotoAsBaseline()">Use Wardrobe Catalog Photo</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modalHandover')">Cancel</button>
+        <button class="btn btn-success" onclick="confirmHandover()">Confirm Handover</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: RETURN INSPECTION & AI VERIFY -->
+  <div id="modalReturnInspect" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">🔍 Return Item & AI Image Check</h3>
+        <button class="modal-close" onclick="closeModal('modalReturnInspect')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Upload a photo of the item's current condition before returning. The AI engine will compare this with the owner's pre-lend photo to verify integrity.
+        </p>
+        <div class="form-group">
+          <label class="form-label">Current Condition Photo URL *</label>
+          <input type="text" id="returnPhotoUrl" class="form-input" placeholder="Paste return photo link">
+          <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="setReturnDemoPhoto('clean')">Preset: Clean Condition</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="setReturnDemoPhoto('stain')">Preset: Stained Condition</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modalReturnInspect')">Cancel</button>
+        <button class="btn btn-primary" onclick="submitReturnInspection()">Run AI Verification Check</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: RATE TRANSACTION -->
+  <div id="modalRate" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">⭐ Rate Lending Experience</h3>
+        <button class="modal-close" onclick="closeModal('modalRate')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group" style="text-align: center; margin-bottom: 1.5rem;">
+          <label class="form-label">Star Rating</label>
+          <div id="starRatingSelect" style="font-size: 2rem; cursor: pointer; color: #C86A5A;">
+            <span onclick="setRatingScore(1)">★</span>
+            <span onclick="setRatingScore(2)">★</span>
+            <span onclick="setRatingScore(3)">★</span>
+            <span onclick="setRatingScore(4)">★</span>
+            <span onclick="setRatingScore(5)">★</span>
+          </div>
+          <input type="hidden" id="selectedStarScore" value="5">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Review / Feedback</label>
+          <textarea id="rateReviewText" class="form-textarea" rows="3" placeholder="How was the condition of the item and punctuality?"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Aspect Tags</label>
+          <input type="text" id="rateAspectTags" class="form-input" value="Clean, Punctual, Great Care">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modalRate')">Cancel</button>
+        <button class="btn btn-success" onclick="submitRating()">Complete & Recalculate Trust</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CREATE COMPLAINT & COMPENSATION CLAIM -->
+  <div id="modalComplaint" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">⚖️ File Dispute & Compensation Claim</h3>
+        <button class="modal-close" onclick="closeModal('modalComplaint')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Issue Category *</label>
+          <select id="compType" class="form-select" onchange="updateEstimatedCompensation()">
+            <option value="STAINS">Fabric Stain / Spill</option>
+            <option value="FABRIC_DAMAGE">Surface / Fabric Abrasion</option>
+            <option value="TEARS">Tear or Seam Split</option>
+            <option value="MISSING_ACCESSORY">Missing Part / Button / Zipper Pull</option>
+            <option value="LATE_RETURN">Unreasonable Late Return</option>
+            <option value="ITEM_LOST">Item Lost / Not Returned</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Detailed Description of Damage</label>
+          <textarea id="compDescription" class="form-textarea" rows="3" placeholder="Describe where the damage occurred, verified discrepancies, etc."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Evidence Photo URL (AI Check Link)</label>
+          <input type="text" id="compEvidenceImg" class="form-input" placeholder="Link to photo showing damage">
+        </div>
+        <div style="background: #FAF0EE; border: 1px solid #E09A8A; border-radius: 8px; padding: 0.85rem; margin-bottom: 1rem;">
+          <div style="font-size: 0.8rem; font-weight: 700; color: #6D2E3A;">🤖 AI Compensation Recommendation</div>
+          <div id="compAiEstimate" style="font-size: 1.15rem; font-weight: 800; color: #9A4454; margin: 0.25rem 0;">₹450</div>
+          <div id="compAiExplanation" style="font-size: 0.76rem; color: #7E565F;">Calculated based on cleaning formula and damage variance index.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Claimed Compensation Amount (₹)</label>
+          <input type="number" id="compClaimedAmount" class="form-input" value="450">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modalComplaint')">Cancel</button>
+        <button class="btn btn-danger" onclick="submitComplaint()">Submit Dispute</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PILOT USER SWITCHER (FOR EASY DEMO) -->
+  <div id="modalUserSwitcher" class="modal-overlay">
+    <div class="modal-box" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title">👥 Switch Pilot Member</h3>
+        <button class="modal-close" onclick="closeModal('modalUserSwitcher')">&times;</button>
+      </div>
+      <div class="modal-body" id="pilotUserList" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <!-- Loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast">Notification</div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
